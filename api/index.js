@@ -1,18 +1,24 @@
 import express from "express" 
 import bodyParser from "body-parser"
+import path from "path"
+import { fileURLToPath } from 'url'
 
- const app = express()
-const port = process.env.PORT || 3000;
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = path.dirname(__filename)
 
+const app = express()
 
- let posts = []
+// In-memory storage (note: this resets on each serverless function call)
+let posts = []
 
+// Configure EJS with absolute paths for Vercel
 app.set("view engine", "ejs");
- app.use(express.static("public"))
+app.set('views', path.join(__dirname, '../views'));
+app.use(express.static(path.join(__dirname, '../public')));
 
- app.use(bodyParser.urlencoded({extended: true}));
+app.use(bodyParser.urlencoded({extended: true}));
 
- app.get("/edit/:id", (req,res) => {
+app.get("/edit/:id", (req,res) => {
     const id = parseInt(req.params.id);
     const post = posts.find(post => post.id === id);
     if (post) {
@@ -20,10 +26,9 @@ app.set("view engine", "ejs");
     } else {
         res.redirect("/");
     }
-    
- });
+});
 
- app.post("/edit/:id", (req, res) => {
+app.post("/edit/:id", (req, res) => {
     const id = parseInt (req.params.id);
     const postIndex = posts.findIndex(post => post.id === id);
 
@@ -37,13 +42,13 @@ app.set("view engine", "ejs");
         };
     }
     res.redirect("/");
- });
+});
 
- app.post("/delete/:id", (req, res) => {
+app.post("/delete/:id", (req, res) => {
     const id = parseInt(req.params.id);
     posts = posts.filter(post => post.id !== id);
     res.redirect("/");
- })
+})
 
 app.get("/contact", (req, res) => {
     res.render("contact.ejs")
@@ -83,13 +88,5 @@ app.get("/", async (req, res) => {
     }
 });
 
-
-
+// Export the Express app for Vercel
 export default app;
-
-// Start server for local development
-if (process.env.NODE_ENV !== 'production') {
-    app.listen(port, () => {
-        console.log(`Server running on port ${port}`);
-    });
-}
