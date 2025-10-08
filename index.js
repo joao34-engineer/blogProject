@@ -6,7 +6,7 @@ const port = process.env.PORT || 3000;
 
 
  let posts = []
- 
+
 app.set("view engine", "ejs");
  app.use(express.static("public"))
 
@@ -59,11 +59,11 @@ app.get("/create", (req, res) => {
 
 app.post("/create", (req, res) => {
     const newPost = {
-        id: posts.length + 1,
-        title: req.body.title,
-        author: req.body.author,
-        content: req.body.content
-        
+      id: posts.length + 1,
+      title: req.body.title,
+      author: req.body.author,
+      content: req.body.content,
+      date: new Date().toLocaleDateString(),
     };
     posts.push(newPost);
     res.redirect("/");
