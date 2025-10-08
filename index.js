@@ -100,3 +100,6 @@ app.delete("", (req, res) => {
 app.listen(port, () => {
     console.log(`Listening on port http://localhost:${port}`)
 })
+
+// Export for Vercel
+export default app;
