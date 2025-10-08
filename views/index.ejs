@@ -1,0 +1,85 @@
+<%- include("partials/header.ejs") %>
+<div class="main-section">
+	<div class="container">		
+		<h1>Welcome to My Blog</h1>
+		<% if (locals.posts && posts.length > 0) { %>
+			<div class="post-grid">
+			<% posts.forEach((post, index)=> { %>
+				<article class="postcard">
+					<h2>
+						<%= post.title %>
+					</h2>
+					<p class="post-meta">
+						<span class="date">
+							<%= post.date %>
+						</span>
+						<span class="author">
+							<%= post.author %>
+						</span>
+					</p>
+					<p class="post-content" data-index="<%= index %>">
+						<%= post.content.substring(0, 60) %>
+							<span class="more-text" style="display: none;">
+								<%= post.content.substring(60) %>
+							</span>
+					</p>
+				<div class="post-actions">
+					<button class="read-more" data-index="<%= index %>">Read More</button>
+					<a href="/edit/<%= post.id %>" class="edit-btn">Edit</a>
+					<form action="/delete/<%= post.id %>" method="POST" style="display: inline;">
+						<button type="submit" class="delete-btn" onclick="return confirm('Delete this post?')">Delete</button>
+					</form>
+				</div>
+				</article>
+
+			<% }) %>
+			</div>
+			<a href="/create" class="create-btn">Create New Post</a>
+			<div class="second-container">
+
+			<% }else { %>
+				<p class="no-posts"><a href="/create">Create a post</a></p>
+			<% } %>
+			</div>
+		</div>
+	<div class="another-section">
+		<h2>Latest Tech News</h2>
+		<% if (locals.techNews && techNews.length> 0) { %>
+			<div class="tech-news-grid">
+				<% techNews.forEach(article=> { %>
+					<article class="tech-card">
+						<h3>
+							<%= article.title %>
+						</h3>
+						<p class="tech-meta">
+							<span class="author">By <%= article.user.name %></span>
+							<span class="date">
+								<%= new Date(article.published_at).toLocaleDateString() %>
+							</span>
+						</p>
+						<p class="tech-excerpt">
+							<%= article.description || 'No description available' %>
+						</p>
+						<a href="<%= article.url %>" target="_blank" class="tech-read-more">Read on Dev.to</a>
+					</article>
+					<% }) %>
+			</div>
+			<% } else { %>
+				<p class="no-tech-news"></p>
+				<% } %>
+	</div>
+
+</main>
+
+<footer>
+
+	<p>&copy; <%= new Date().getFullYear() %> My Blog. All rights reserved.</p>
+</footer>
+</div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+<script src="/script.js"></script>
+</body>
+
+</html>
+
+<!-- <%- include("partials/footer.ejs") %> -->
