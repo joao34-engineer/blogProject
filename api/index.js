@@ -12,6 +12,8 @@ const app = express()
 let posts = []
 
 // Configure EJS with absolute paths for Vercel
+
+app.use(express.static(path.join(__dirname, '../public')));
 app.set("view engine", "ejs");
 app.set('views', path.join(__dirname, '../views'));
 app.use(express.static(path.join(__dirname, '../public')));
