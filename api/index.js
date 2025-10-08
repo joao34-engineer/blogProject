@@ -85,5 +85,11 @@ app.get("/", async (req, res) => {
 
 
 
-// Export for Vercel
 export default app;
+
+// Start server for local development
+if (process.env.NODE_ENV !== 'production') {
+    app.listen(port, () => {
+        console.log(`Server running on port ${port}`);
+    });
+}
